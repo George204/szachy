@@ -42,6 +42,21 @@ ruchy = []
 
 
 def moz(x, p):
+    def spraw(p1, m1, p2, m2):
+        odleglosc = 0
+        while odleglosc > -1:  # pentla w dół
+            odleglosc += 1
+            sprawdzane = (p1 + odleglosc * m1, p2 + odleglosc * m2)
+            if odleglosc > 8:
+                odleglosc = -2
+            elif sprawdzane not in startpos:
+                mozruchy.append(sprawdzane)
+            elif startpos[sprawdzane][1] is ruch:
+                odleglosc = -2
+            elif startpos[sprawdzane][1] is not ruch:
+                mozruchy.append(sprawdzane)
+                odleglosc = -2
+
     mozruchy = []
     if x[2] == "p":
         if ruch == "w":
@@ -58,86 +73,56 @@ def moz(x, p):
                 mozruchy.append((p[0] + kierunek, p[1] - 1))
         if (p[0] + kierunek, p[1] + 1) in startpos:
             if startpos[(p[0] + kierunek, p[1] + 1)][1] is not ruch:
-                mozruchy.append((p[0] + kierunek, p[1] + 1))
+                mozruchy.append((p[0] + kierunek, p[1] + 1))#todo bicie w przelocie
     if x[2] == "r":
-        odleglosc = 0
-        while odleglosc > -1:  # pentla w dół
-            odleglosc += 1
-            if odleglosc > 8:
-                odleglosc = -2
-            elif (p[0] + odleglosc, p[1]) not in startpos:
-                mozruchy.append((p[0] + odleglosc, p[1]))
-            elif startpos[(p[0] + odleglosc, p[1])][1] is ruch:
-                odleglosc = -2
-            elif startpos[(p[0] + odleglosc, p[1])][1] is not ruch:
-                mozruchy.append((p[0] + odleglosc, p[1]))
-                odleglosc = -2
-        odleglosc = 0
-        while odleglosc > -1:
-            odleglosc += 1
-            if odleglosc > 8:
-                odleglosc = -2
-            elif (p[0] - odleglosc, p[1]) not in startpos:
-                mozruchy.append((p[0] - odleglosc, p[1]))
-            elif startpos[(p[0] - odleglosc, p[1])][1] is ruch:
-                odleglosc = -2
-            elif startpos[(p[0] - odleglosc, p[1])][1] is not ruch:
-                mozruchy.append((p[0] - odleglosc, p[1]))
-                odleglosc = -2
-        odleglosc = 0
-        while odleglosc > -1:
-            odleglosc += 1
-            if odleglosc > 8:
-                odleglosc = -2
-            elif (p[0], odleglosc + p[1]) not in startpos:
-                mozruchy.append((p[0], odleglosc + p[1]))
-            elif startpos[(p[0], odleglosc + p[1])][1] is ruch:
-                odleglosc = -2
-            elif startpos[(p[0], odleglosc + p[1])][1] is not ruch:
-                mozruchy.append((p[0], odleglosc + p[1]))
-                odleglosc = -2
-        odleglosc = 0
-        while odleglosc > -1:
-            odleglosc += 1
-            if odleglosc > 8:
-                odleglosc = -2
-            elif (p[0], p[1] - odleglosc) not in startpos:
-                mozruchy.append((p[0], p[1] - odleglosc))
-            elif startpos[(p[0], p[1] - odleglosc)][1] is ruch:
-                odleglosc = -2
-            elif startpos[(p[0], p[1] - odleglosc)][1] is not ruch:
-                mozruchy.append((p[0], p[1] - odleglosc))
-                odleglosc = -2
+        spraw(p[0], 1, p[1], 0)
+        spraw(p[0], -1, p[1], 0)
+        spraw(p[0], 0, p[1], 1)
+        spraw(p[0], 0, p[1], -1)
     if x[2] == "n":
         night = [(p[0] - 2, p[1] + 1), (p[0] - 2, p[1] - 1), (p[0] + 2, p[1] + 1), (p[0] + 2, p[1] - 1),
                  (p[0] + 1, p[1] + 2), (p[0] + 1, p[1] - 2), (p[0] - 1, p[1] - 2), (p[0] - 1, p[1] + 2)]
         for sam in night:
             if sam in startpos:
-                if ruch == startpos[sam][1]:
-                    print("pasuje")
-                else:
+                if ruch is not startpos[sam][1]:
                     mozruchy.append(sam)
             else:
                 mozruchy.append(sam)
     if x[2] == "b":
-        print("brak")
-        # todo goniec
+        spraw(p[0], 1, p[1], 1)
+        spraw(p[0], 1, p[1], -1)
+        spraw(p[0], -1, p[1], 1)
+        spraw(p[0], -1, p[1], -1)
     if x[2] == "q":
-        print("brak")
-        # todo królowa
+        spraw(p[0], 1, p[1], 1)
+        spraw(p[0], 1, p[1], -1)
+        spraw(p[0], -1, p[1], 1)
+        spraw(p[0], -1, p[1], -1)
+        spraw(p[0], 1, p[1], 0)
+        spraw(p[0], -1, p[1], 0)
+        spraw(p[0], 0, p[1], 1)
+        spraw(p[0], 0, p[1], -1)
     if x[2] == "k":
-        print("brak")
-        # todo król
-    return (mozruchy)
+        dospawk = [(p[0] + 1, p[1] + 1), (p[0] + 1, p[1]), (p[0] + 1, p[1] - 1), (p[0], p[1] + 1), (p[0], p[1] - 1),
+                   (p[0] - 1, p[1] + 1), (p[0] - 1, p[1]),
+                   (p[0] - 1, p[1] - 1)]
+        for i in dospawk:
+            if i not in startpos:
+                mozruchy.append(i)
+        if x[3] is True and startpos[(p[0], p[1] + 3)][3] is True and (p[0], p[1] + 2) not in startpos and (p[0], p[1] + 1) not in startpos:
+            mozruchy.append((p[0], p[1] + 2))
+        if x[3] is True and startpos[(p[0], p[1] - 4)][3] is True and (p[0], p[1] - 2) not in startpos and (p[0], p[1] - 1) not in startpos and (p[0], p[1] - 3) not in startpos:
+            mozruchy.append((p[0], p[1] - 2))
+    return mozruchy
 
 
 startpos = {
-    (1, 1): (br, "b", "r"), (1, 2): (bn, "b", "n"), (1, 3): (bb, "b", "b"), (1, 4): (bq, "b", "q"),
-    (1, 5): (bk, "b", "k"), (1, 6): (bb, "b", "b"), (1, 7): (bn, "b", "n"), (1, 8): (br, "b", "r"),
+    (1, 1): (br, "b", "r", True), (1, 2): (bn, "b", "n"), (1, 3): (bb, "b", "b"), (1, 4): (bq, "b", "q"),
+    (1, 5): (bk, "b", "k", True), (1, 6): (bb, "b", "b"), (1, 7): (bn, "b", "n"), (1, 8): (br, "b", "r", True),
     (2, 1): (bp, "b", "p"), (2, 2): (bp, "b", "p"), (2, 3): (bp, "b", "p"), (2, 4): (bp, "b", "p"),
     (2, 5): (bp, "b", "p"), (2, 6): (bp, "b", "p"), (2, 7): (bp, "b", "p"), (2, 8): (bp, "b", "p"),
-    (8, 1): (wr, "w", "r"), (8, 2): (wn, "w", "n"), (8, 3): (wb, "w", "b"), (8, 4): (wq, "w", "q"),
-    (8, 6): (wb, "w", "b"), (8, 5): (wk, "w", "k"), (8, 7): (wn, "w", "n"), (8, 8): (wr, "w", "r"),
+    (8, 1): (wr, "w", "r", True), (8, 2): (wn, "w", "n"), (8, 3): (wb, "w", "b"), (8, 4): (wq, "w", "q"),
+    (8, 6): (wb, "w", "b"), (8, 5): (wk, "w", "k", True), (8, 7): (wn, "w", "n"), (8, 8): (wr, "w", "r", True),
     (7, 1): (wp, "w", "p"), (7, 2): (wp, "w", "p"), (7, 3): (wp, "w", "p"), (7, 4): (wp, "w", "p"),
     (7, 6): (wp, "w", "p"), (7, 5): (wp, "w", "p"), (7, 7): (wp, "w", "p"), (7, 8): (wp, "w", "p"),
 }
@@ -166,8 +151,15 @@ while True:
                     startpos[clickval] = fig_wrence
                     wrece = False
                 elif clickval in ruchy:
+                    fig_wrence = (fig_wrence[0], fig_wrence[1], fig_wrence[2], False)
                     startpos[clickval] = fig_wrence
                     wrece = False
+                    if poczontek[1]-clickval[1] == -2 and fig_wrence[2] == "k":
+                        startpos[(clickval[0],clickval[1]-1)] = startpos[(clickval[0], clickval[1]+1)]
+                        del startpos[clickval[0], clickval[1] + 1]
+                    elif poczontek[1]-clickval[1] == 2 and fig_wrence[2] == "k":
+                        startpos[(clickval[0],clickval[1]+1)] = startpos[(clickval[0], clickval[1]-2)]
+                        del startpos[clickval[0], clickval[1] - 2]
                     if ruch == "w":
                         ruch = "b"
                     else:
