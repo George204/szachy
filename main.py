@@ -1,4 +1,4 @@
-import pygame, sys
+import sys, pygame
 
 print(pygame.__version__)
 res = (800, 800)
@@ -36,35 +36,99 @@ pygame.display.set_caption("Szachy")
 programIcon = pygame.image.load("z\\bk.png").convert_alpha()
 pygame.display.set_icon(programIcon)
 a, b = 0, 0
-wrence = False
+wrece = False
 ruch = "w"
 ruchy = []
-def moz(x,p):
+
+
+def moz(x, p):
     mozruchy = []
     if x[2] == "p":
-        if x[1] == "w":
-            if (p[0]-1, p[1]) not in startpos:
-                mozruchy.append((p[0]-1, p[1]))
-            if p[0] == 7:
-                if (p[0]-2, p[1]) not in startpos:
-                    mozruchy.append((p[0]-2, p[1]))
-            if (p[0]-1, p[1]-1) in startpos:
-                mozruchy.append(((p[0]-1,p[1]-1)))
-            if (p[0]-1, p[1]+1) in startpos:
-                mozruchy.append(((p[0]-1,p[1]+1)))
-        if x[1] == "b":
-            if (p[0]+1, p[1]) not in startpos:
-                mozruchy.append((p[0]+1, p[1]))
-            if p[0] == 2:
-                if (p[0]+2, p[1]) not in startpos:
-                    mozruchy.append((p[0]+2, p[1]))
-            if (p[0]+1, p[1]-1) in startpos:
-                mozruchy.append(((p[0]+1,p[1]-1)))
-            if (p[0]+1, p[1]+1) in startpos:
-                mozruchy.append(((p[0]+1,p[1]+1)))
-    return(mozruchy)
-
-
+        if ruch == "w":
+            kierunek = -1
+        elif ruch == "b":
+            kierunek = 1
+        if (p[0] + kierunek, p[1]) not in startpos:
+            mozruchy.append((p[0] + kierunek, p[1]))
+            if p[0] == 4.5 - 2.5 * kierunek:
+                if (p[0] + kierunek * 2, p[1]) not in startpos:
+                    mozruchy.append((p[0] + kierunek * 2, p[1]))
+        if (p[0] + kierunek, p[1] - 1) in startpos:
+            if startpos[(p[0] + kierunek, p[1] - 1)][1] is not ruch:
+                mozruchy.append((p[0] + kierunek, p[1] - 1))
+        if (p[0] + kierunek, p[1] + 1) in startpos:
+            if startpos[(p[0] + kierunek, p[1] + 1)][1] is not ruch:
+                mozruchy.append((p[0] + kierunek, p[1] + 1))
+    if x[2] == "r":
+        odleglosc = 0
+        while odleglosc > -1:  # pentla w dół
+            odleglosc += 1
+            if odleglosc > 8:
+                odleglosc = -2
+            elif (p[0] + odleglosc, p[1]) not in startpos:
+                mozruchy.append((p[0] + odleglosc, p[1]))
+            elif startpos[(p[0] + odleglosc, p[1])][1] is ruch:
+                odleglosc = -2
+            elif startpos[(p[0] + odleglosc, p[1])][1] is not ruch:
+                mozruchy.append((p[0] + odleglosc, p[1]))
+                odleglosc = -2
+        odleglosc = 0
+        while odleglosc > -1:
+            odleglosc += 1
+            if odleglosc > 8:
+                odleglosc = -2
+            elif (p[0] - odleglosc, p[1]) not in startpos:
+                mozruchy.append((p[0] - odleglosc, p[1]))
+            elif startpos[(p[0] - odleglosc, p[1])][1] is ruch:
+                odleglosc = -2
+            elif startpos[(p[0] - odleglosc, p[1])][1] is not ruch:
+                mozruchy.append((p[0] - odleglosc, p[1]))
+                odleglosc = -2
+        odleglosc = 0
+        while odleglosc > -1:
+            odleglosc += 1
+            if odleglosc > 8:
+                odleglosc = -2
+            elif (p[0], odleglosc + p[1]) not in startpos:
+                mozruchy.append((p[0], odleglosc + p[1]))
+            elif startpos[(p[0], odleglosc + p[1])][1] is ruch:
+                odleglosc = -2
+            elif startpos[(p[0], odleglosc + p[1])][1] is not ruch:
+                mozruchy.append((p[0], odleglosc + p[1]))
+                odleglosc = -2
+        odleglosc = 0
+        while odleglosc > -1:
+            odleglosc += 1
+            if odleglosc > 8:
+                odleglosc = -2
+            elif (p[0], p[1] - odleglosc) not in startpos:
+                mozruchy.append((p[0], p[1] - odleglosc))
+            elif startpos[(p[0], p[1] - odleglosc)][1] is ruch:
+                odleglosc = -2
+            elif startpos[(p[0], p[1] - odleglosc)][1] is not ruch:
+                mozruchy.append((p[0], p[1] - odleglosc))
+                odleglosc = -2
+    if x[2] == "n":
+        night = [(p[0] - 2, p[1] + 1), (p[0] - 2, p[1] - 1), (p[0] + 2, p[1] + 1), (p[0] + 2, p[1] - 1),
+                 (p[0] + 1, p[1] + 2), (p[0] + 1, p[1] - 2), (p[0] - 1, p[1] - 2), (p[0] - 1, p[1] + 2)]
+        for sam in night:
+            if sam in startpos:
+                if ruch == startpos[sam][1]:
+                    print("pasuje")
+                else:
+                    mozruchy.append(sam)
+            else:
+                mozruchy.append(sam)
+    if x[2] == "b":
+        print("brak")
+        # todo goniec
+    if x[2] == "q":
+        print("brak")
+        # todo królowa
+    if x[2] == "k":
+        print("brak")
+        # todo król
+    return (mozruchy)
 
 
 startpos = {
@@ -89,27 +153,25 @@ while True:
             pos = pygame.mouse.get_pos()
             clickval = ((pos[1] // (res[1] / 8) + 1), pos[0] // (res[1] / 8) + 1)
 
-            if not wrence:
+            if not wrece:
                 if clickval in startpos:
                     if startpos[clickval][1] == ruch:
                         fig_wrence = startpos[clickval]
                         del startpos[clickval]
-                        wrence = True
                         ruchy = moz(fig_wrence, clickval)
                         poczontek = clickval
-            elif wrence:
+                        wrece = True
+            elif wrece:
                 if clickval == poczontek:
                     startpos[clickval] = fig_wrence
-                    wrence = False
+                    wrece = False
                 elif clickval in ruchy:
                     startpos[clickval] = fig_wrence
-                    wrence = False
+                    wrece = False
                     if ruch == "w":
                         ruch = "b"
                     else:
                         ruch = "w"
-
-
 
     # Ticking
     dt = clock.tick()
@@ -119,10 +181,12 @@ while True:
     screen.blit(board, (0, 0))
     for i in startpos:
         screen.blit(startpos[i][0], ((i[1] - 1) * res[1] / 8, (i[0] - 1) * res[1] / 8,))
-    if wrence:
+    if wrece:
         for i in ruchy:
-            pygame.draw.circle(screen,radius=res[1]/16,center=(((i[1] - 1) * res[1] / 8)+res[1]/16, ((i[0] - 1) * res[1] / 8)+res[1]/16), color=(0,0,0),width=2)
-    if wrence:
+            pygame.draw.circle(screen, radius=res[1] / 16, center=(
+                ((i[1] - 1) * res[1] / 8) + res[1] / 16, ((i[0] - 1) * res[1] / 8) + res[1] / 16), color=(0, 0, 0),
+                               width=2)
+    if wrece:
         x = pygame.mouse.get_pos()[1] - res[1] / 16
         y = pygame.mouse.get_pos()[0] - res[1] / 16
         screen.blit(fig_wrence[0], (y, x))
