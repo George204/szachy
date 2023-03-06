@@ -41,6 +41,35 @@ ruch = "w"
 ruchy = []
 
 
+def sprczyszach(pk1, pk2, kol):
+    szach = False
+
+    def spraw(p1, m1, p2, m2):
+        odleglosc = 0
+        while odleglosc > -1:  # pentla w dół
+            odleglosc += 1
+            sprawdzane = (p1 + odleglosc * m1, p2 + odleglosc * m2)
+            if odleglosc > 8:
+                odleglosc = -2
+            elif startpos[sprawdzane][1] is kol:
+                odleglosc = -2
+            elif startpos[sprawdzane][1] is not kol:
+                if (m1, m2) == (1, 1) or (m1, m2) == (-1, -1) or (m1, m2) == (-1, 1) or (m1, m2) == (1, -1):
+                    if startpos[sprawdzane][2] == "q" or startpos[sprawdzane][2] == "b":
+                        szach = True
+                if (m1, m2) == (1, 0) or (m1, m2) == (-1, 0) or (m1, m2) == (0, 1) or (m1, m2) == (0, -1):
+                    if startpos[sprawdzane][2] == "q" or startpos[sprawdzane][2] == "r":
+                        szach = True
+    spraw(pk1, 1, pk2, 1)
+    spraw(pk1, 1, pk2, -1)
+    spraw(pk1, -1, pk2, 1)
+    spraw(pk1, -1, pk2, -1)
+    spraw(pk1, 1, pk2, 0)
+    spraw(pk1, -1, pk2, 0)
+    spraw(pk1, 0, pk2, 1)
+    spraw(pk1, 0, pk2, -1)
+
+
 def moz(x, p):
     def spraw(p1, m1, p2, m2):
         odleglosc = 0
@@ -73,7 +102,7 @@ def moz(x, p):
                 mozruchy.append((p[0] + kierunek, p[1] - 1))
         if (p[0] + kierunek, p[1] + 1) in startpos:
             if startpos[(p[0] + kierunek, p[1] + 1)][1] is not ruch:
-                mozruchy.append((p[0] + kierunek, p[1] + 1))#todo bicie w przelocie
+                mozruchy.append((p[0] + kierunek, p[1] + 1))  # todo bicie w przelocie
     if x[2] == "r":
         spraw(p[0], 1, p[1], 0)
         spraw(p[0], -1, p[1], 0)
@@ -109,9 +138,11 @@ def moz(x, p):
         for i in dospawk:
             if i not in startpos:
                 mozruchy.append(i)
-        if x[3] is True and startpos[(p[0], p[1] + 3)][3] is True and (p[0], p[1] + 2) not in startpos and (p[0], p[1] + 1) not in startpos:
+        if x[3] is True and startpos[(p[0], p[1] + 3)][3] is True and (p[0], p[1] + 2) not in startpos and (
+        p[0], p[1] + 1) not in startpos:
             mozruchy.append((p[0], p[1] + 2))
-        if x[3] is True and startpos[(p[0], p[1] - 4)][3] is True and (p[0], p[1] - 2) not in startpos and (p[0], p[1] - 1) not in startpos and (p[0], p[1] - 3) not in startpos:
+        if x[3] is True and startpos[(p[0], p[1] - 4)][3] is True and (p[0], p[1] - 2) not in startpos and (
+        p[0], p[1] - 1) not in startpos and (p[0], p[1] - 3) not in startpos:
             mozruchy.append((p[0], p[1] - 2))
     return mozruchy
 
@@ -154,11 +185,11 @@ while True:
                     fig_wrence = (fig_wrence[0], fig_wrence[1], fig_wrence[2], False)
                     startpos[clickval] = fig_wrence
                     wrece = False
-                    if poczontek[1]-clickval[1] == -2 and fig_wrence[2] == "k":
-                        startpos[(clickval[0],clickval[1]-1)] = startpos[(clickval[0], clickval[1]+1)]
+                    if poczontek[1] - clickval[1] == -2 and fig_wrence[2] == "k":
+                        startpos[(clickval[0], clickval[1] - 1)] = startpos[(clickval[0], clickval[1] + 1)]
                         del startpos[clickval[0], clickval[1] + 1]
-                    elif poczontek[1]-clickval[1] == 2 and fig_wrence[2] == "k":
-                        startpos[(clickval[0],clickval[1]+1)] = startpos[(clickval[0], clickval[1]-2)]
+                    elif poczontek[1] - clickval[1] == 2 and fig_wrence[2] == "k":
+                        startpos[(clickval[0], clickval[1] + 1)] = startpos[(clickval[0], clickval[1] - 2)]
                         del startpos[clickval[0], clickval[1] - 2]
                     if ruch == "w":
                         ruch = "b"
@@ -166,7 +197,7 @@ while True:
                         ruch = "w"
 
     # Ticking
-    dt = clock.tick()
+    # dt = clock.tick()
 
     # render
     # screen.fill((0,0,0))
